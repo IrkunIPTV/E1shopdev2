@@ -162,12 +162,14 @@
 <section class="payment">
   <h2>💳 Payment Method</h2>
   <div class="payment-box">
+
     <a href="https://toyyibpay.com/PEMBELIAN-E1SHOP" class="payment-btn toyyibpay" target="_blank" rel="noopener">
       💳 Pay via ToyyibPay
       <span>Online Banking • Card • E-Wallet</span>
     </a>
 
-    <a href="https://wa.me/601158256253" class="payment-btn whatsapp" target="_blank" rel="noopener">
+    <!-- UPDATED: WhatsApp with prefilled message -->
+    <a href="https://wa.me/601158256253?text=How%20to%20pay%20sir%3F" class="payment-btn whatsapp" target="_blank" rel="noopener">
       💬 Pay via WhatsApp
       <span>Manual Transfer</span>
     </a>
@@ -176,6 +178,7 @@
       📱 Scan QR Pay
       <span>Instant Payment</span>
     </button>
+
   </div>
 </section>
 
@@ -183,6 +186,7 @@
 <section class="reviews">
   <h2>⭐ Customer Reviews</h2>
   <p class="review-sub">Trusted by customers across Asia</p>
+
   <div class="review-box">
     <div class="review-card"><p class="review-text">“Very stable IPTV, HD quality and fast support.”</p><span class="review-name">— Pan, Japan</span></div>
     <div class="review-card"><p class="review-text">“Payment was easy and activation was instant.”</p><span class="review-name">— Wanam, Thailand</span></div>
@@ -218,6 +222,10 @@
   <div class="modal-box">
     <h2 id="appTitle"></h2>
     <ul id="priceList"></ul>
+
+    <!-- I HAVE PAID -->
+    <button class="btn whatsapp-btn" onclick="iHavePaid()">✅ I Have Paid</button>
+
     <button class="btn outline" onclick="closePackage()">Close</button>
   </div>
 </div>
@@ -230,11 +238,33 @@
   </div>
 </div>
 
+<!-- NEW: AFTER PAYMENT POPUP -->
+<div class="modal" id="afterPayModal">
+  <div class="modal-box">
+    <h2>✅ After Payment</h2>
+    <p style="margin:10px 0;">
+      Please complete payment in ToyyibPay.<br>
+      Then click below to WhatsApp us for verification.
+    </p>
+
+    <button class="btn whatsapp-btn" onclick="openWhatsappAfterPay()">
+      💬 Continue to WhatsApp
+    </button>
+
+    <button class="btn outline" onclick="closeAfterPay()">Close</button>
+  </div>
+</div>
+
 <!-- ================= SCRIPT ================= -->
 <script>
+  // WhatsApp destination (your number)
   const WHATSAPP_NUMBER = "601158256253";
 
-  // FULL packageData (exactly from your index)
+  // Store selected app + package label (so WhatsApp message can include it)
+  let selectedAppName = "";
+  let selectedPackageLabel = "";
+
+  // Each price has its own ToyyibPay link
   const packageData = {
     "KARAOKE TV": { prices: [{ label: "💰 RM15 ➡️ 30 HARI", url: "https://toyyibpay.com/KARAOKE-TV-RM15-30-HARI" }] },
     "MULTIROOM": { prices: [{ label: "💰 RM30 ➡️ SEBULAN", url: "https://toyyibpay.com/MULTIROOM-RM30-30-HARI" }] },
@@ -343,7 +373,9 @@
     const priceList = document.getElementById("priceList");
 
     appTitle.textContent = title;
+    selectedAppName = title;          // NEW: store app name
     priceList.innerHTML = "";
+    selectedPackageLabel = "";        // reset
 
     const data = packageData[key];
     if (!data || !Array.isArray(data.prices) || data.prices.length === 0) {
@@ -358,27 +390,18 @@
       const text = document.createElement("span");
       text.textContent = item.label;
 
-      // Use BUTTON (not <a>) so we can control redirect
-      const pay = document.createElement("button");
-      pay.type = "button";
+      const pay = document.createElement("a");
+      pay.href = item.url || "https://toyyibpay.com/";
+      pay.target = "_blank";
+      pay.rel = "noopener";
       pay.textContent = "Pay Now";
       pay.className = "btn small";
 
+      // When user clicks Pay Now:
+      // 1) remember package  2) show after-payment popup
       pay.addEventListener("click", () => {
-        // 1) Open ToyyibPay in new tab
-        window.open(item.url || "https://toyyibpay.com/", "_blank", "noopener");
-
-        // 2) Auto redirect THIS tab to WhatsApp with full details
-        const message = encodeURIComponent(
-          `Hi Admin 👋\n\nI have completed payment.\n📦 Service: ${title}\n🧾 Package: ${item.label}\n\nPlease help to verify & activate. Thank you 🙏`
-        );
-
-        const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
-
-        // small delay so ToyyibPay tab opens first
-        setTimeout(() => {
-          window.location.href = waUrl;
-        }, 900);
+        selectedPackageLabel = item.label;
+        openAfterPay();
       });
 
       li.appendChild(text);
@@ -399,6 +422,39 @@
 
   function closeQR() {
     document.getElementById("qrModal").style.display = "none";
+  }
+
+  // Popup after clicking Pay Now
+  function openAfterPay() {
+    document.getElementById("afterPayModal").style.display = "flex";
+  }
+
+  function closeAfterPay() {
+    document.getElementById("afterPayModal").style.display = "none";
+  }
+
+  // NEW: Continue to WhatsApp (after payment)
+  function openWhatsappAfterPay() {
+    const appName = selectedAppName || document.getElementById("appTitle").textContent || "E1SHOP";
+    const pkg = selectedPackageLabel ? `\n🧾 Package: ${selectedPackageLabel}` : "";
+
+    const message = encodeURIComponent(
+      `Hi Admin 👋\n\nI have completed payment.\n📦 Service: ${appName}${pkg}\n\nPlease help to verify & activate. Thank you 🙏`
+    );
+
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
+  }
+
+  // Existing: I Have Paid button in package modal
+  function iHavePaid() {
+    const appName = document.getElementById("appTitle").textContent || "E1SHOP";
+    const pkg = selectedPackageLabel ? `\n🧾 Package: ${selectedPackageLabel}` : "";
+
+    const message = encodeURIComponent(
+      `Hi Admin 👋\n\nI have made payment.\n📦 Service: ${appName}${pkg}\n\nPlease help to verify & activate. Thank you 🙏`
+    );
+
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
   }
 </script>
 
