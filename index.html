@@ -162,7 +162,6 @@
 <section class="payment">
   <h2>💳 Payment Method</h2>
   <div class="payment-box">
-
     <a href="https://toyyibpay.com/PEMBELIAN-E1SHOP" class="payment-btn toyyibpay" target="_blank" rel="noopener">
       💳 Pay via ToyyibPay
       <span>Online Banking • Card • E-Wallet</span>
@@ -177,7 +176,6 @@
       📱 Scan QR Pay
       <span>Instant Payment</span>
     </button>
-
   </div>
 </section>
 
@@ -185,7 +183,6 @@
 <section class="reviews">
   <h2>⭐ Customer Reviews</h2>
   <p class="review-sub">Trusted by customers across Asia</p>
-
   <div class="review-box">
     <div class="review-card"><p class="review-text">“Very stable IPTV, HD quality and fast support.”</p><span class="review-name">— Pan, Japan</span></div>
     <div class="review-card"><p class="review-text">“Payment was easy and activation was instant.”</p><span class="review-name">— Wanam, Thailand</span></div>
@@ -218,7 +215,7 @@
 
 <!-- ================= MODALS ================= -->
 <div class="modal" id="packageModal">
-  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="appTitle">
+  <div class="modal-box">
     <h2 id="appTitle"></h2>
     <ul id="priceList"></ul>
     <button class="btn outline" onclick="closePackage()">Close</button>
@@ -226,7 +223,7 @@
 </div>
 
 <div class="modal" id="qrModal">
-  <div class="modal-box" role="dialog" aria-modal="true">
+  <div class="modal-box">
     <h2>📲 Scan QR to Pay</h2>
     <img src="qr.png" class="qr-img" alt="QR Pay">
     <button class="btn outline" onclick="closeQR()">Done</button>
@@ -237,95 +234,114 @@
 <script>
   const WHATSAPP_NUMBER = "601158256253";
 
-  // FULL packageData from your message (unchanged)
+  // FULL packageData (exactly from your index)
   const packageData = {
     "KARAOKE TV": { prices: [{ label: "💰 RM15 ➡️ 30 HARI", url: "https://toyyibpay.com/KARAOKE-TV-RM15-30-HARI" }] },
     "MULTIROOM": { prices: [{ label: "💰 RM30 ➡️ SEBULAN", url: "https://toyyibpay.com/MULTIROOM-RM30-30-HARI" }] },
     "NETFLIX": { prices: [{ label: "💰 RM28 ➡️ 30 HARI", url: "https://toyyibpay.com/NETFLIX-RM28-30-HARI" }] },
-    "GO OTT": { prices: [
-      { label: "💰 GO 1 RM13 ➡️ 33HARI", url: "https://toyyibpay.com/GO-1-RM13-33Hari" },
-      { label: "💰 GO 2 RM29 ➡️ 77HARI", url: "https://toyyibpay.com/GO-2-RM29-77HARI" },
-      { label: "💰 GO 3 RM62 ➡️ 173HARI", url: "https://toyyibpay.com/GO-3-RM62-173HARI" }
-    ]},
-    "KINGTV": { prices: [
-      { label: "💰 RM15 ➡️ 1 BULAN", url: "https://toyyibpay.com/KINGTV-RM15-1-BULAN" },
-      { label: "💰 RM38 ➡️ 3 BULAN", url: "https://toyyibpay.com/KINGTV-RM38-3-BULAN" },
-      { label: "💰 RM70 ➡️ 6 BULAN", url: "https://toyyibpay.com/KINGTV-RM70-6-BULAN" },
-      { label: "💰 RM110 ➡️ 1 TAHUN", url: "https://toyyibpay.com/KINGTV-RM110-1-TAHUN" },
-      { label: "💰 RM300 ➡️ 4 TAHUN", url: "https://toyyibpay.com/KINGTV-RM300-4-TAHUN" }
-    ]},
-    "SYOKTV": { prices: [
-      { label: "💰 RM13 ➡️ 1 BULAN", url: "https://toyyibpay.com/SYOKTV-RM13-1-BULAN" },
-      { label: "💰 RM33 ➡️ 3 BULAN", url: "https://toyyibpay.com/SYOKTV-RM33-3-BULAN" },
-      { label: "💰 RM60 ➡️ 6 BULAN", url: "https://toyyibpay.com/SYOKTV-RM60-6-BULAN" },
-      { label: "💰 RM110 ➡️ 1 TAHUN", url: "https://toyyibpay.com/SYOKTV-RM110-1-TAHUN" },
-      { label: "💰 RM270 ➡️ UNLIMITED", url: "https://toyyibpay.com/SYOKTV-RM270-UNLIMITED" }
-    ]},
-    "MSTV": { prices: [
-      { label: "💰 1 BULAN 1 DEVICE ➡️ RM29", url: "https://toyyibpay.com/MSTV-1-BULAN-1-device-RM29" },
-      { label: "💰 1 BULAN 2 DEVICE ➡️ RM44", url: "https://toyyibpay.com/MSTV-1-BULAN-2-DEVICE-RM44" },
-      { label: "💰 3 BULAN 1 DEVICE ➡️ RM59", url: "https://toyyibpay.com/MSTV-3-BULAN-1-DEVICE-RM59" },
-      { label: "💰 3 BULAN 2 DEVICE ➡️ RM84", url: "https://toyyibpay.com/MSTV-3-BULAN-2-DEVICE-RM84" },
-      { label: "💰 1 TAHUN 2 DEVICE ➡️ RM254", url: "https://toyyibpay.com/MSTV-1-TAHUN-2-DEVICE-RM254" }
-    ]},
-    "WDHD": { prices: [
-      { label: "💲 1 BULAN - RM35", url: "https://toyyibpay.com/WDHD-1-BULAN-RM35" },
-      { label: "💲 3 BULAN - RM90", url: "https://toyyibpay.com/WDHD-3-BULAN-RM90" },
-      { label: "💲 6 BULAN - RM140", url: "https://toyyibpay.com/WDHD-6-BULAN-RM140" },
-      { label: "💲 12 BULAN - RM240", url: "https://toyyibpay.com/WDHD-12-BULAN-RM240" }
-    ]},
-    "MYIPTV4K": { prices: [
-      { label: "💰 3 BULAN ➡️ RM110", url: "https://toyyibpay.com/MYIPTV4K-3-BULAN-RM110" },
-      { label: "💰 6 BULAN ➡️ RM170", url: "https://toyyibpay.com/MYIPTV4K-6-BULAN-RM170" },
-      { label: "💰 12 BULAN ➡️ RM270", url: "https://toyyibpay.com/MYIPTV4K-12-BULAN-RM270" }
-    ]},
-    "IPTV4K": { prices: [
-      { label: "💰 6 BULAN ➡️ RM170", url: "https://toyyibpay.com/IPTV4K-6-BULAN-RM170" },
-      { label: "💰 12 BULAN ➡️ RM270", url: "https://toyyibpay.com/IPTV4K-12-BULAN-RM270" }
-    ]},
-    "SKYTV": { prices: [
-      { label: "💰 1 BULAN TVBOX ➡️ RM22", url: "https://toyyibpay.com/SKYTV-1-BULAN-TVBOX-RM22" },
-      { label: "💰 3 BULAN TVBOX ➡️ RM55", url: "https://toyyibpay.com/SKYTV-3-BULAN-TVBOX-RM55" },
-      { label: "💰 6 BULAN TVBOX ➡️ RM90", url: "https://toyyibpay.com/SKYTV-6-BULAN-TVBOX-RM90" },
-      { label: "💰 1 TAHUN TVBOX ➡️ RM150", url: "https://toyyibpay.com/SKYTV-1-TAHUN-TVBOX-RM150" }
-    ]},
-    "TVTECH": { prices: [
-      { label: "💰 1 DEVICE ➡️ 1 BLN RM12", url: "https://toyyibpay.com/TVTECH-1-DEVICE-1-BLN-RM12" },
-      { label: "💰 1 DEVICE ➡️ 3 BLN RM35", url: "https://toyyibpay.com/TVTECH-1-DEVICE-3-BLN-RM35" },
-      { label: "💰 1 DEVICE ➡️ 6 BLN RM60", url: "https://toyyibpay.com/TVTECH-1-DEVICE-6-BLN-RM60" },
-      { label: "💰 1 DEVICE ➡️ 1 THN RM110", url: "https://toyyibpay.com/TVTECH-1-DEVICE-1-THN-RM110" },
-      { label: "💰 2 DEVICE ➡️ 1 BLN RM20", url: "https://toyyibpay.com/TVTECH-2-DEVICE-1-BLN-RM20" },
-      { label: "💰 2 DEVICE ➡️ 3 BLN RM55", url: "https://toyyibpay.com/TVTECH-2-DEVICE-3-BLN-RM55" },
-      { label: "💰 2 DEVICE ➡️ 6 BLN RM105", url: "https://toyyibpay.com/TVTECH-2-DEVICE-6-BLN-RM105" },
-      { label: "💰 2 DEVICE ➡️ 1 THN RM200", url: "https://toyyibpay.com/TVTECH-2-DEVICE-1-THN-RM200" }
-    ]},
-    "APOGO": { prices: [
-      { label: "📕 BASIC 1 Month ➡️ RM22", url: "https://toyyibpay.com/APOGO-BASIC-1-Month-RM22" },
-      { label: "📕 BASIC 3 Months ➡️ RM58", url: "https://toyyibpay.com/APOGO-BASIC-3-Months-RM58" },
-      { label: "📕 BASIC 6 Months ➡️ RM108", url: "https://toyyibpay.com/APOGO-BASIC-6-Months-RM108" },
-      { label: "📕 BASIC 12 Months ➡️ RM202", url: "https://toyyibpay.com/APOGO-BASIC-12-Months-RM202" },
-      { label: "📘 PLUS 18 1 Month ➡️ RM26", url: "https://toyyibpay.com/APOGO-PLUS-18-1-Month-RM26" },
-      { label: "📘 PLUS 18 3 Month ➡️ RM70", url: "https://toyyibpay.com/APOGO-PLUS-18-3-Month-RM70" },
-      { label: "📘 PLUS 18 6 Month ➡️ RM127", url: "https://toyyibpay.com/APOGO-PLUS-18-6-Month-RM127" },
-      { label: "📘 PLUS 18 12 Month ➡️ RM238", url: "https://toyyibpay.com/APOGOPLUS-18-12-Month-RM238" }
-    ]},
-    "ABANGTV": { prices: [
-      { label: "5 Hari ➡️ RM5", url: "https://toyyibpay.com/ABANGTV-5-Hari-RM5" },
-      { label: "1 BULAN ➡️ RM22", url: "https://toyyibpay.com/ABANGTV-1-BULAN-RM22" },
-      { label: "3 BULAN ➡️ RM60", url: "https://toyyibpay.com/ABANGTV-3-BULAN-RM60" },
-      { label: "6 BULAN ➡️ RM90", url: "https://toyyibpay.com/ABANGTV-6-BULAN-RM90" },
-      { label: "1 TAHUN ➡️ RM150", url: "https://toyyibpay.com/ABANGTV-1-TAHUN-RM150" }
-    ]}
+    "GO OTT": {
+      prices: [
+        { label: "💰 GO 1 RM13 ➡️ 33HARI", url: "https://toyyibpay.com/GO-1-RM13-33Hari" },
+        { label: "💰 GO 2 RM29 ➡️ 77HARI", url: "https://toyyibpay.com/GO-2-RM29-77HARI" },
+        { label: "💰 GO 3 RM62 ➡️ 173HARI", url: "https://toyyibpay.com/GO-3-RM62-173HARI" }
+      ]
+    },
+    "KINGTV": {
+      prices: [
+        { label: "💰 RM15 ➡️ 1 BULAN", url: "https://toyyibpay.com/KINGTV-RM15-1-BULAN" },
+        { label: "💰 RM38 ➡️ 3 BULAN", url: "https://toyyibpay.com/KINGTV-RM38-3-BULAN" },
+        { label: "💰 RM70 ➡️ 6 BULAN", url: "https://toyyibpay.com/KINGTV-RM70-6-BULAN" },
+        { label: "💰 RM110 ➡️ 1 TAHUN", url: "https://toyyibpay.com/KINGTV-RM110-1-TAHUN" },
+        { label: "💰 RM300 ➡️ 4 TAHUN", url: "https://toyyibpay.com/KINGTV-RM300-4-TAHUN" }
+      ]
+    },
+    "SYOKTV": {
+      prices: [
+        { label: "💰 RM13 ➡️ 1 BULAN", url: "https://toyyibpay.com/SYOKTV-RM13-1-BULAN" },
+        { label: "💰 RM33 ➡️ 3 BULAN", url: "https://toyyibpay.com/SYOKTV-RM33-3-BULAN" },
+        { label: "💰 RM60 ➡️ 6 BULAN", url: "https://toyyibpay.com/SYOKTV-RM60-6-BULAN" },
+        { label: "💰 RM110 ➡️ 1 TAHUN", url: "https://toyyibpay.com/SYOKTV-RM110-1-TAHUN" },
+        { label: "💰 RM270 ➡️ UNLIMITED", url: "https://toyyibpay.com/SYOKTV-RM270-UNLIMITED" }
+      ]
+    },
+    "MSTV": {
+      prices: [
+        { label: "💰 1 BULAN 1 DEVICE ➡️ RM29", url: "https://toyyibpay.com/MSTV-1-BULAN-1-device-RM29" },
+        { label: "💰 1 BULAN 2 DEVICE ➡️ RM44", url: "https://toyyibpay.com/MSTV-1-BULAN-2-DEVICE-RM44" },
+        { label: "💰 3 BULAN 1 DEVICE ➡️ RM59", url: "https://toyyibpay.com/MSTV-3-BULAN-1-DEVICE-RM59" },
+        { label: "💰 3 BULAN 2 DEVICE ➡️ RM84", url: "https://toyyibpay.com/MSTV-3-BULAN-2-DEVICE-RM84" },
+        { label: "💰 1 TAHUN 2 DEVICE ➡️ RM254", url: "https://toyyibpay.com/MSTV-1-TAHUN-2-DEVICE-RM254" }
+      ]
+    },
+    "WDHD": {
+      prices: [
+        { label: "💲 1 BULAN - RM35", url: "https://toyyibpay.com/WDHD-1-BULAN-RM35" },
+        { label: "💲 3 BULAN - RM90", url: "https://toyyibpay.com/WDHD-3-BULAN-RM90" },
+        { label: "💲 6 BULAN - RM140", url: "https://toyyibpay.com/WDHD-6-BULAN-RM140" },
+        { label: "💲 12 BULAN - RM240", url: "https://toyyibpay.com/WDHD-12-BULAN-RM240" }
+      ]
+    },
+    "MYIPTV4K": {
+      prices: [
+        { label: "💰 3 BULAN ➡️ RM110", url: "https://toyyibpay.com/MYIPTV4K-3-BULAN-RM110" },
+        { label: "💰 6 BULAN ➡️ RM170", url: "https://toyyibpay.com/MYIPTV4K-6-BULAN-RM170" },
+        { label: "💰 12 BULAN ➡️ RM270", url: "https://toyyibpay.com/MYIPTV4K-12-BULAN-RM270" }
+      ]
+    },
+    "IPTV4K": {
+      prices: [
+        { label: "💰 6 BULAN ➡️ RM170", url: "https://toyyibpay.com/IPTV4K-6-BULAN-RM170" },
+        { label: "💰 12 BULAN ➡️ RM270", url: "https://toyyibpay.com/IPTV4K-12-BULAN-RM270" }
+      ]
+    },
+    "SKYTV": {
+      prices: [
+        { label: "💰 1 BULAN TVBOX ➡️ RM22", url: "https://toyyibpay.com/SKYTV-1-BULAN-TVBOX-RM22" },
+        { label: "💰 3 BULAN TVBOX ➡️ RM55", url: "https://toyyibpay.com/SKYTV-3-BULAN-TVBOX-RM55" },
+        { label: "💰 6 BULAN TVBOX ➡️ RM90", url: "https://toyyibpay.com/SKYTV-6-BULAN-TVBOX-RM90" },
+        { label: "💰 1 TAHUN TVBOX ➡️ RM150", url: "https://toyyibpay.com/SKYTV-1-TAHUN-TVBOX-RM150" }
+      ]
+    },
+    "TVTECH": {
+      prices: [
+        { label: "💰 1 DEVICE ➡️ 1 BLN RM12", url: "https://toyyibpay.com/TVTECH-1-DEVICE-1-BLN-RM12" },
+        { label: "💰 1 DEVICE ➡️ 3 BLN RM35", url: "https://toyyibpay.com/TVTECH-1-DEVICE-3-BLN-RM35" },
+        { label: "💰 1 DEVICE ➡️ 6 BLN RM60", url: "https://toyyibpay.com/TVTECH-1-DEVICE-6-BLN-RM60" },
+        { label: "💰 1 DEVICE ➡️ 1 THN RM110", url: "https://toyyibpay.com/TVTECH-1-DEVICE-1-THN-RM110" },
+        { label: "💰 2 DEVICE ➡️ 1 BLN RM20", url: "https://toyyibpay.com/TVTECH-2-DEVICE-1-BLN-RM20" },
+        { label: "💰 2 DEVICE ➡️ 3 BLN RM55", url: "https://toyyibpay.com/TVTECH-2-DEVICE-3-BLN-RM55" },
+        { label: "💰 2 DEVICE ➡️ 6 BLN RM105", url: "https://toyyibpay.com/TVTECH-2-DEVICE-6-BLN-RM105" },
+        { label: "💰 2 DEVICE ➡️ 1 THN RM200", url: "https://toyyibpay.com/TVTECH-2-DEVICE-1-THN-RM200" }
+      ]
+    },
+    "APOGO": {
+      prices: [
+        { label: "📕 BASIC  1 Month ➡️ RM22", url: "https://toyyibpay.com/APOGO-BASIC-1-Month-RM22" },
+        { label: "📕 BASIC  3 Months ➡️ RM58", url: "https://toyyibpay.com/APOGO-BASIC-3-Months-RM58" },
+        { label: "📕 BASIC  6 Months ➡️ RM108", url: "https://toyyibpay.com/APOGO-BASIC-6-Months-RM108" },
+        { label: "📕 BASIC  12 Months ➡️ RM202", url: "https://toyyibpay.com/APOGO-BASIC-12-Months-RM202" },
+        { label: "📘 PLUS 18  1 Month ➡️ RM26", url: "https://toyyibpay.com/APOGO-PLUS-18-1-Month-RM26" },
+        { label: "📘 PLUS 18  3 Month ➡️ RM70", url: "https://toyyibpay.com/APOGO-PLUS-18-3-Month-RM70" },
+        { label: "📘 PLUS 18  6 Month ➡️ RM127", url: "https://toyyibpay.com/APOGO-PLUS-18-6-BULAN-RM127" },
+        { label: "📘 PLUS 18  12 Month ➡️ RM238", url: "https://toyyibpay.com/APOGOPLUS-18-12-Month-RM238" }
+      ]
+    },
+    "ABANGTV": {
+      prices: [
+        { label: "5 Hari ➡️ RM5", url: "https://toyyibpay.com/ABANGTV-5-Hari-RM5" },
+        { label: "1 BULAN ➡️ RM22", url: "https://toyyibpay.com/ABANGTV-1-BULAN-RM22" },
+        { label: "3 BULAN ➡️ RM60", url: "https://toyyibpay.com/ABANGTV-3-BULAN-RM60" },
+        { label: "6 BULAN ➡️ RM90", url: "https://toyyibpay.com/ABANGTV-6-BULAN-RM90" },
+        { label: "1 TAHUN ➡️ RM150", url: "https://toyyibpay.com/ABANGTV-1-TAHUN-RM150" }
+      ]
+    }
   };
-
-  let selectedAppName = "";
 
   function openPackage(key, title) {
     const modal = document.getElementById("packageModal");
     const appTitle = document.getElementById("appTitle");
     const priceList = document.getElementById("priceList");
 
-    selectedAppName = title;
     appTitle.textContent = title;
     priceList.innerHTML = "";
 
@@ -342,24 +358,27 @@
       const text = document.createElement("span");
       text.textContent = item.label;
 
-      // IMPORTANT: use button so we can control auto WhatsApp
+      // Use BUTTON (not <a>) so we can control redirect
       const pay = document.createElement("button");
       pay.type = "button";
       pay.textContent = "Pay Now";
       pay.className = "btn small";
 
       pay.addEventListener("click", () => {
-        // 1) Open ToyyibPay in NEW TAB
+        // 1) Open ToyyibPay in new tab
         window.open(item.url || "https://toyyibpay.com/", "_blank", "noopener");
 
-        // 2) Auto WhatsApp in THIS TAB
+        // 2) Auto redirect THIS tab to WhatsApp with full details
         const message = encodeURIComponent(
-          `Hi Admin 👋\n\nI have completed payment.\n📦 Service: ${selectedAppName}\n🧾 Package: ${item.label}\n\nPlease help to verify & activate. Thank you 🙏`
+          `Hi Admin 👋\n\nI have completed payment.\n📦 Service: ${title}\n🧾 Package: ${item.label}\n\nPlease help to verify & activate. Thank you 🙏`
         );
 
+        const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+
+        // small delay so ToyyibPay tab opens first
         setTimeout(() => {
-          window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
-        }, 650);
+          window.location.href = waUrl;
+        }, 900);
       });
 
       li.appendChild(text);
@@ -368,9 +387,6 @@
     });
 
     modal.style.display = "flex";
-
-    // reset scroll to top
-    setTimeout(() => { priceList.scrollTop = 0; }, 0);
   }
 
   function closePackage() {
@@ -384,22 +400,6 @@
   function closeQR() {
     document.getElementById("qrModal").style.display = "none";
   }
-
-  // Close modal when click outside
-  document.getElementById("packageModal").addEventListener("click", (e) => {
-    if (e.target.id === "packageModal") closePackage();
-  });
-  document.getElementById("qrModal").addEventListener("click", (e) => {
-    if (e.target.id === "qrModal") closeQR();
-  });
-
-  // Close on ESC
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      closePackage();
-      closeQR();
-    }
-  });
 </script>
 
 </body>
