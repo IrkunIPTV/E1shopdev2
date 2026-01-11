@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -168,8 +169,7 @@
       <span>Online Banking • Card • E-Wallet</span>
     </a>
 
-    <!-- UPDATED: WhatsApp with prefilled message -->
-    <a href="https://wa.me/601158256253?text=How%20to%20pay%20sir%3F" class="payment-btn whatsapp" target="_blank" rel="noopener">
+    <a href="https://wa.me/601158256253" class="payment-btn whatsapp" target="_blank" rel="noopener">
       💬 Pay via WhatsApp
       <span>Manual Transfer</span>
     </a>
@@ -223,7 +223,7 @@
     <h2 id="appTitle"></h2>
     <ul id="priceList"></ul>
 
-    <!-- I HAVE PAID -->
+    <!-- NEW: I HAVE PAID BUTTON -->
     <button class="btn whatsapp-btn" onclick="iHavePaid()">✅ I Have Paid</button>
 
     <button class="btn outline" onclick="closePackage()">Close</button>
@@ -238,37 +238,28 @@
   </div>
 </div>
 
-<!-- NEW: AFTER PAYMENT POPUP -->
-<div class="modal" id="afterPayModal">
-  <div class="modal-box">
-    <h2>✅ After Payment</h2>
-    <p style="margin:10px 0;">
-      Please complete payment in ToyyibPay.<br>
-      Then click below to WhatsApp us for verification.
-    </p>
-
-    <button class="btn whatsapp-btn" onclick="openWhatsappAfterPay()">
-      💬 Continue to WhatsApp
-    </button>
-
-    <button class="btn outline" onclick="closeAfterPay()">Close</button>
-  </div>
-</div>
-
 <!-- ================= SCRIPT ================= -->
 <script>
   // WhatsApp destination (your number)
   const WHATSAPP_NUMBER = "601158256253";
 
-  // Store selected app + package label (so WhatsApp message can include it)
-  let selectedAppName = "";
-  let selectedPackageLabel = "";
-
   // Each price has its own ToyyibPay link
   const packageData = {
-    "KARAOKE TV": { prices: [{ label: "💰 RM15 ➡️ 30 HARI", url: "https://toyyibpay.com/KARAOKE-TV-RM15-30-HARI" }] },
-    "MULTIROOM": { prices: [{ label: "💰 RM30 ➡️ SEBULAN", url: "https://toyyibpay.com/MULTIROOM-RM30-30-HARI" }] },
-    "NETFLIX": { prices: [{ label: "💰 RM28 ➡️ 30 HARI", url: "https://toyyibpay.com/NETFLIX-RM28-30-HARI" }] },
+    "KARAOKE TV": {
+      prices: [
+        { label: "💰 RM15 ➡️ 30 HARI", url: "https://toyyibpay.com/KARAOKE-TV-RM15-30-HARI" }
+      ]
+    },
+    "MULTIROOM": {
+      prices: [
+        { label: "💰 RM30 ➡️ SEBULAN", url: "https://toyyibpay.com/MULTIROOM-RM30-30-HARI" }
+      ]
+    },
+    "NETFLIX": {
+      prices: [
+        { label: "💰 RM28 ➡️ 30 HARI", url: "https://toyyibpay.com/NETFLIX-RM28-30-HARI" }
+      ]
+    },
     "GO OTT": {
       prices: [
         { label: "💰 GO 1 RM13 ➡️ 33HARI", url: "https://toyyibpay.com/GO-1-RM13-33Hari" },
@@ -338,6 +329,7 @@
         { label: "💰 1 DEVICE ➡️ 3 BLN RM35", url: "https://toyyibpay.com/TVTECH-1-DEVICE-3-BLN-RM35" },
         { label: "💰 1 DEVICE ➡️ 6 BLN RM60", url: "https://toyyibpay.com/TVTECH-1-DEVICE-6-BLN-RM60" },
         { label: "💰 1 DEVICE ➡️ 1 THN RM110", url: "https://toyyibpay.com/TVTECH-1-DEVICE-1-THN-RM110" },
+
         { label: "💰 2 DEVICE ➡️ 1 BLN RM20", url: "https://toyyibpay.com/TVTECH-2-DEVICE-1-BLN-RM20" },
         { label: "💰 2 DEVICE ➡️ 3 BLN RM55", url: "https://toyyibpay.com/TVTECH-2-DEVICE-3-BLN-RM55" },
         { label: "💰 2 DEVICE ➡️ 6 BLN RM105", url: "https://toyyibpay.com/TVTECH-2-DEVICE-6-BLN-RM105" },
@@ -352,7 +344,7 @@
         { label: "📕 BASIC  12 Months ➡️ RM202", url: "https://toyyibpay.com/APOGO-BASIC-12-Months-RM202" },
         { label: "📘 PLUS 18  1 Month ➡️ RM26", url: "https://toyyibpay.com/APOGO-PLUS-18-1-Month-RM26" },
         { label: "📘 PLUS 18  3 Month ➡️ RM70", url: "https://toyyibpay.com/APOGO-PLUS-18-3-Month-RM70" },
-        { label: "📘 PLUS 18  6 Month ➡️ RM127", url: "https://toyyibpay.com/APOGO-PLUS-18-6-BULAN-RM127" },
+        { label: "📘 PLUS 18  6 Month ➡️ RM127", url: "https://toyyibpay.com/APOGO-PLUS-18-6-Month-RM127" },
         { label: "📘 PLUS 18  12 Month ➡️ RM238", url: "https://toyyibpay.com/APOGOPLUS-18-12-Month-RM238" }
       ]
     },
@@ -367,15 +359,17 @@
     }
   };
 
+  // Store selected package label (so WhatsApp message can include it)
+  let selectedPackageLabel = "";
+
   function openPackage(key, title) {
     const modal = document.getElementById("packageModal");
     const appTitle = document.getElementById("appTitle");
     const priceList = document.getElementById("priceList");
 
     appTitle.textContent = title;
-    selectedAppName = title;          // NEW: store app name
     priceList.innerHTML = "";
-    selectedPackageLabel = "";        // reset
+    selectedPackageLabel = ""; // reset
 
     const data = packageData[key];
     if (!data || !Array.isArray(data.prices) || data.prices.length === 0) {
@@ -397,11 +391,9 @@
       pay.textContent = "Pay Now";
       pay.className = "btn small";
 
-      // When user clicks Pay Now:
-      // 1) remember package  2) show after-payment popup
+      // When user clicks Pay Now, remember which package they chose
       pay.addEventListener("click", () => {
         selectedPackageLabel = item.label;
-        openAfterPay();
       });
 
       li.appendChild(text);
@@ -424,28 +416,7 @@
     document.getElementById("qrModal").style.display = "none";
   }
 
-  // Popup after clicking Pay Now
-  function openAfterPay() {
-    document.getElementById("afterPayModal").style.display = "flex";
-  }
-
-  function closeAfterPay() {
-    document.getElementById("afterPayModal").style.display = "none";
-  }
-
-  // NEW: Continue to WhatsApp (after payment)
-  function openWhatsappAfterPay() {
-    const appName = selectedAppName || document.getElementById("appTitle").textContent || "E1SHOP";
-    const pkg = selectedPackageLabel ? `\n🧾 Package: ${selectedPackageLabel}` : "";
-
-    const message = encodeURIComponent(
-      `Hi Admin 👋\n\nI have completed payment.\n📦 Service: ${appName}${pkg}\n\nPlease help to verify & activate. Thank you 🙏`
-    );
-
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
-  }
-
-  // Existing: I Have Paid button in package modal
+  // NEW: WhatsApp redirect after customer paid
   function iHavePaid() {
     const appName = document.getElementById("appTitle").textContent || "E1SHOP";
     const pkg = selectedPackageLabel ? `\n🧾 Package: ${selectedPackageLabel}` : "";
@@ -454,7 +425,8 @@
       `Hi Admin 👋\n\nI have made payment.\n📦 Service: ${appName}${pkg}\n\nPlease help to verify & activate. Thank you 🙏`
     );
 
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+    window.open(url, "_blank");
   }
 </script>
 
