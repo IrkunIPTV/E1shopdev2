@@ -162,13 +162,12 @@
 <section class="payment">
   <h2>💳 Payment Method</h2>
   <div class="payment-box">
-
     <a href="https://toyyibpay.com/PEMBELIAN-E1SHOP" class="payment-btn toyyibpay" target="_blank" rel="noopener">
       💳 Pay via ToyyibPay
       <span>Online Banking • Card • E-Wallet</span>
     </a>
 
-    <a href="https://wa.me/601158256253?text=How%20to%20pay%20sir%3F" class="payment-btn whatsapp" target="_blank" rel="noopener">
+    <a href="https://wa.me/601158256253" class="payment-btn whatsapp" target="_blank" rel="noopener">
       💬 Pay via WhatsApp
       <span>Manual Transfer</span>
     </a>
@@ -177,7 +176,6 @@
       📱 Scan QR Pay
       <span>Instant Payment</span>
     </button>
-
   </div>
 </section>
 
@@ -185,7 +183,6 @@
 <section class="reviews">
   <h2>⭐ Customer Reviews</h2>
   <p class="review-sub">Trusted by customers across Asia</p>
-
   <div class="review-box">
     <div class="review-card"><p class="review-text">“Very stable IPTV, HD quality and fast support.”</p><span class="review-name">— Pan, Japan</span></div>
     <div class="review-card"><p class="review-text">“Payment was easy and activation was instant.”</p><span class="review-name">— Wanam, Thailand</span></div>
@@ -216,9 +213,6 @@
 <a href="https://wa.me/601158256253" class="floating-whatsapp" target="_blank" rel="noopener">💬</a>
 <a href="https://t.me/IPTVLOVER" class="floating-telegram" target="_blank" rel="noopener">✈️</a>
 
-<!-- NEW: Floating AFTER PAID button (hidden until Pay Now clicked) -->
-<a href="#" id="afterPaidBtn" class="floating-afterpaid" style="display:none;">✅</a>
-
 <!-- ================= MODALS ================= -->
 <div class="modal" id="packageModal">
   <div class="modal-box">
@@ -240,6 +234,7 @@
 <script>
   const WHATSAPP_NUMBER = "601158256253";
 
+  // FULL packageData (exactly from your index)
   const packageData = {
     "KARAOKE TV": { prices: [{ label: "💰 RM15 ➡️ 30 HARI", url: "https://toyyibpay.com/KARAOKE-TV-RM15-30-HARI" }] },
     "MULTIROOM": { prices: [{ label: "💰 RM30 ➡️ SEBULAN", url: "https://toyyibpay.com/MULTIROOM-RM30-30-HARI" }] },
@@ -327,7 +322,7 @@
         { label: "📕 BASIC  12 Months ➡️ RM202", url: "https://toyyibpay.com/APOGO-BASIC-12-Months-RM202" },
         { label: "📘 PLUS 18  1 Month ➡️ RM26", url: "https://toyyibpay.com/APOGO-PLUS-18-1-Month-RM26" },
         { label: "📘 PLUS 18  3 Month ➡️ RM70", url: "https://toyyibpay.com/APOGO-PLUS-18-3-Month-RM70" },
-        { label: "📘 PLUS 18  6 Month ➡️ RM127", url: "https://toyyibpay.com/APOGO-PLUS-18-6-Month-RM127" },
+        { label: "📘 PLUS 18  6 Month ➡️ RM127", url: "https://toyyibpay.com/APOGO-PLUS-18-6-BULAN-RM127" },
         { label: "📘 PLUS 18  12 Month ➡️ RM238", url: "https://toyyibpay.com/APOGOPLUS-18-12-Month-RM238" }
       ]
     },
@@ -342,20 +337,13 @@
     }
   };
 
-  // store selected info for AFTER PAID message
-  let selectedAppName = "";
-  let selectedPackageLabel = "";
-
   function openPackage(key, title) {
     const modal = document.getElementById("packageModal");
     const appTitle = document.getElementById("appTitle");
     const priceList = document.getElementById("priceList");
 
     appTitle.textContent = title;
-    selectedAppName = title;
-
     priceList.innerHTML = "";
-    selectedPackageLabel = ""; // reset
 
     const data = packageData[key];
     if (!data || !Array.isArray(data.prices) || data.prices.length === 0) {
@@ -370,17 +358,27 @@
       const text = document.createElement("span");
       text.textContent = item.label;
 
-      const pay = document.createElement("a");
-      pay.href = item.url || "https://toyyibpay.com/";
-      pay.target = "_blank";
-      pay.rel = "noopener";
+      // Use BUTTON (not <a>) so we can control redirect
+      const pay = document.createElement("button");
+      pay.type = "button";
       pay.textContent = "Pay Now";
       pay.className = "btn small";
 
-      // When user clicks Pay Now, remember and show floating AFTER PAID button
       pay.addEventListener("click", () => {
-        selectedPackageLabel = item.label;
-        showAfterPaidButton();
+        // 1) Open ToyyibPay in new tab
+        window.open(item.url || "https://toyyibpay.com/", "_blank", "noopener");
+
+        // 2) Auto redirect THIS tab to WhatsApp with full details
+        const message = encodeURIComponent(
+          `Hi Admin 👋\n\nI have completed payment.\n📦 Service: ${title}\n🧾 Package: ${item.label}\n\nPlease help to verify & activate. Thank you 🙏`
+        );
+
+        const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+
+        // small delay so ToyyibPay tab opens first
+        setTimeout(() => {
+          window.location.href = waUrl;
+        }, 900);
       });
 
       li.appendChild(text);
@@ -402,26 +400,6 @@
   function closeQR() {
     document.getElementById("qrModal").style.display = "none";
   }
-
-  // show floating after paid button
-  function showAfterPaidButton() {
-    const btn = document.getElementById("afterPaidBtn");
-    btn.style.display = "grid";
-  }
-
-  // click floating after paid -> whatsapp message
-  document.getElementById("afterPaidBtn").addEventListener("click", function(e){
-    e.preventDefault();
-
-    const appName = selectedAppName || "E1SHOP";
-    const pkg = selectedPackageLabel ? `\n🧾 Package: ${selectedPackageLabel}` : "";
-
-    const message = encodeURIComponent(
-      `Hi Admin 👋\n\nI have made payment.\n📦 Service: ${appName}${pkg}\n\nPlease help to verify & activate. Thank you 🙏`
-    );
-
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
-  });
 </script>
 
 </body>
